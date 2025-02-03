@@ -4,6 +4,7 @@ import org.jline.terminal.TerminalBuilder
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.TimeSource
 
+// Note: Printing during a progress bar could overwrite the wrong characters currently.
 class DefaultGlobalTrackerJVM: ProgressTracker() {
     var stackCount = 0 // Indicates how far to go back
 
@@ -12,13 +13,13 @@ class DefaultGlobalTrackerJVM: ProgressTracker() {
             val previousStackCount = stackCount
             var newStackCount = 0
 
-            print(backLines(previousStackCount)) // Go back so we can overwrite
+            print(backLines(previousStackCount) + clearAllAfter) // Go back and clear what was written
 
             val printStatement = buildString {
                 activeStack.forEachIndexed {i, bar ->
                     bar.format(getAvailableConsoleWidth()).onSuccess {
 //                    println("\n" + it.format().also { stackCount += it.lines().count() })
-                        append(clearLine + it.format().also { newStackCount += it.lines().count() } + "\n")
+                        append(it.format().also { newStackCount += it.lines().count() } + "\n")
                     }
                 }
             }
@@ -30,6 +31,7 @@ class DefaultGlobalTrackerJVM: ProgressTracker() {
         val forceUpdate = activeStack.firstOrNull()?.complete ?: false
 
         poll(forceUpdate)
+        if (forceUpdate) stackCount-- // The current root completed, we don't want to overwrite it on the next iteration.
     }
 
     var queued: (() -> Unit)? = null
@@ -64,6 +66,11 @@ class DefaultGlobalTrackerJVM: ProgressTracker() {
          * Clear everything on this line.
          */
         val clearLine = "$escape[2K"
+
+        /**
+         * Clear everything after this line.
+         */
+        val clearAllAfter = "$escape[0J"
         /**
          * Go back [count] lines
          */
