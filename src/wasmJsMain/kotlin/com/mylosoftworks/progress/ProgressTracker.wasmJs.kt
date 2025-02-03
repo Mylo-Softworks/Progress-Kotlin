@@ -12,6 +12,6 @@ class DefaultGlobalTrackerNodeJS: ProgressTrackerAnsi() {
     override fun getAvailableConsoleWidth(): Int = windowWidthNode(1) - 1
 }
 
-fun isNodeJs() = js("typeof process !== 'undefined' && process.versions != null && process.versions.node != null") as Boolean
-fun windowWidthNode(default: Int) = (js("process.stdout.columns") ?: default) as Int
+fun isNodeJs(): Boolean = js("typeof process !== 'undefined' && process.versions != null && process.versions.node != null")
+fun windowWidthNode(default: Int): Int = js("process.stdout.columns") ?: default
 actual fun ProgressTracker.Companion.createDefaultGlobalTracker(): ProgressTracker = if (isNodeJs()) DefaultGlobalTrackerNodeJS() else DefaultGlobalTrackerJS()

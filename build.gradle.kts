@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
+
 plugins {
     kotlin("multiplatform") version "2.1.0"
     `maven-publish`
@@ -25,6 +27,11 @@ publishing {
 kotlin {
     jvm()
     js {
+        browser()
+        nodejs()
+    }
+    @OptIn(ExperimentalWasmDsl::class)
+    wasmJs {
         browser()
         nodejs()
     }

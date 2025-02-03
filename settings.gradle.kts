@@ -3,3 +3,4 @@ plugins {
 }
 rootProject.name = "Progress"
 include("Test")
+include("Test-Node")

@@ -1,14 +1,15 @@
 [![](https://www.jitpack.io/v/Mylo-Softworks/Progress-Kotlin.svg)](https://www.jitpack.io/#Mylo-Softworks/Progress-Kotlin)
 
 # Progress
-A Kotlin Multiplatform (JVM + JS) terminal (expandable) progress-bar library.
+A Kotlin Multiplatform (Jvm + Js + WasmJs) terminal ([expandable](#renderers)) progress-bar library.
 
 Example with 3 progress bars being rapidly updated:
 [![](https://asciinema.org/a/azEgpT4fqx5njOW8ZARQvEjJ7.svg)](https://asciinema.org/a/azEgpT4fqx5njOW8ZARQvEjJ7?autoplay=1)
 
 ### Renderers
 * Progress uses [org.jline:jansi]() on **JVM** for updating progress bars in terminals, this doesn't work in intellij's run terminal currently, half works in intellij's regular terminal, and works normally on Windows command prompt and most linux/macos terminals.
-* **BrowserJS** and **Node.js** currently use a basic println-based renderer, **Node.js** could get an ANSI-based renderer similar to **JVM** in the future.
+* **Node.js** supports ansi without any dependencies.
+* **BrowserJS** currently uses a basic println-based renderer.
 * Custom renderers can be implemented by other developers by extending `ProgressTracker` or with a block for simple/scope-related trackers. Information on implementing custom renderers can be found at [Creating and using custom progress bar renderers](#creating-and-using-custom-progress-bar-renderers)
 
 # Basic usage
